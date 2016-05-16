@@ -10,8 +10,9 @@ fi
 
 zipinfo=$(zipinfo -l "$file")
 ftypes=$(echo "$zipinfo" | grep -E ".*\.[a-zA-Z0-9]*$" | sed -e 's/.*\(\.[a-zA-Z0-9]*\)$/\1/' | sort | uniq)
+others=$(echo "$zipinfo" | grep -E ".*\/[a-zA-Z0-9]*$" | sed -e 's/.*\/\([a-zA-Z0-9]*\)$/\1/' | sort | uniq)
 
-for ft in $ftypes
+for ft in $ftypes $others
 do
     echo -n "$ft"
     echo "$zipinfo" | grep -E "${ft}" | awk '{uncompressed += $4; compressed += $6} END {printf "\t%s\t%s\n", uncompressed, compressed}'
